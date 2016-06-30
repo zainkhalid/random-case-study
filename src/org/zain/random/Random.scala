@@ -20,9 +20,8 @@ sealed trait Random[A] {
     }
   }
 
-  def flatMap[B](f: A => Random[B]): Random[B] = FlatMap(f, this)
-
-  def map[B](f: A => B): Random[B] = Map(f, this)
+  def flatMap[B](f: A => Random[B]): Random[B] = Primitive(rng => f(this.run(rng)).run(rng))
+  def map[B](f: A => B): Random[B] = Primitive(rng => f(this.run(rng)))
 
   def zip[B](that: Random[B]): Random[(A,B)] = {
     /*
@@ -36,7 +35,6 @@ sealed trait Random[A] {
       a <- this
       b <- that
     } yield (a, b)
-
   }
 }
 
