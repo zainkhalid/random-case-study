@@ -1,4 +1,4 @@
-package org.zain.random
+package com.zainkhalid.scala.course.assignments.random
 
 /**
   * Created by zainkhalid on 6/30/16.

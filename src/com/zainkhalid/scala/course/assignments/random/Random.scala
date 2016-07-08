@@ -1,4 +1,4 @@
-package org.zain.random
+package com.zainkhalid.scala.course.assignments.random
 
 /**
   * Created by zainkhalid on 6/30/16.
@@ -20,22 +20,14 @@ sealed trait Random[A] {
     }
   }
 
-  def flatMap[B](f: A => Random[B]): Random[B] = Primitive(rng => f(this.run(rng)).run(rng))
-  def map[B](f: A => B): Random[B] = Primitive(rng => f(this.run(rng)))
+  def flatMap[B](f: A => Random[B]): Random[B] = FlatMap(f, this)
+  def map[B](f: A => B): Random[B] = Map(f, this)
 
-  def zip[B](that: Random[B]): Random[(A,B)] = {
-    /*
-    this flatMap { a =>
-      that map { b =>
-        (a, b)
-      }
-    }
-    */
+  def zip[B](that: Random[B]): Random[(A,B)] =
     for {
       a <- this
       b <- that
     } yield (a, b)
-  }
 }
 
 object Random {
@@ -44,19 +36,6 @@ object Random {
   val boolean: Random[Boolean] = Primitive(rng => rng.nextBoolean())
   val normal: Random[Double] = Primitive(rng => rng.nextGaussian())
   def always[A](in: A): Random[A] = Primitive(rng => in)
-
-
-  val answer = scala.util.Random.nextDouble()
-  answer + answer
-
-  scala.util.Random.nextDouble() + scala.util.Random.nextDouble()
-
-  val answer = Random.double
-  answer.map(a => a + a)
-
-  Random.double.map(a => a + a)
-
-
 }
 
 final case class Primitive[A](generator: scala.util.Random => A) extends Random[A]
