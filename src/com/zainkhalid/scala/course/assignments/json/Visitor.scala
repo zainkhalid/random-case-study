@@ -28,9 +28,9 @@ object Visitor {
     def write(value: Anonymous): JsValue = {
       JsObject(
         Map(
-          "id" -> JsString(value.id),
-          "createdAt" -> JsString(value.createdAt.toString),
-          "age" -> JsString(value.age.toString)
+          "id" -> value.id.toJson,
+          "createdAt" -> value.createdAt.toString.toJson,
+          "age" -> value.age.toString.toJson
         )
       )
     }
@@ -40,10 +40,10 @@ object Visitor {
     def write(value: User): JsValue = {
       JsObject(
         Map(
-          "id" -> JsString(value.id),
-          "createdAt" -> JsString(value.createdAt.toString),
-          "age" -> JsString(value.age.toString),
-          "email" -> JsString(value.email)
+          "id" -> value.id.toJson,
+          "createdAt" -> value.createdAt.toString.toJson,
+          "age" -> value.age.toJson,
+          "email" -> value.email.toJson
         )
       )
     }
