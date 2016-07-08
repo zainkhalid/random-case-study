@@ -5,20 +5,35 @@ package com.zainkhalid.scala.course.assignments.json
   */
 
 sealed trait JsValue {
-  def stringify: String
-}
-
-final case class JsObject(values: Map[String, JsValue]) extends JsValue {
-
-  def stringify = {
-    values
-      .map { case (name, value) =>
-        "\"" + name + "\":" + value.stringify
+  def stringify: String =
+    this match {
+      case JsNull => "null"
+      case JsString(value) => "\"" + value.replaceAll("\\|\"", "\\\\$1") + "\""
+      case JsBoolean(value) => "\"" + value + "\""
+      case JsNumber(value) => value.toString
+      case JsObject(values) => {
+        values.map { case (name, value) =>
+          "\"" + name + "\":" + value.stringify
+        }
+          .mkString("{", ",", "}")
       }
-      .mkString("{", ",", "}")
-  }
+      case JsArray(values) => {
+        values
+          .map(_.stringify)
+          .mkString("[", ",", "]")
+      }
+    }
 }
 
-final case class JsString(value: String) extends JsValue {
-  def stringify = "\"" + value.replaceAll("\\|\"", "\\\\$1") + "\""
-}
+
+case object JsNull extends JsValue
+
+final case class JsObject(values: Map[String, JsValue]) extends JsValue
+
+final case class JsString(value: String) extends JsValue
+
+final case class JsNumber(value: Double) extends JsValue
+
+final case class JsBoolean(value: Boolean) extends JsValue
+
+final case class JsArray(values: Seq[JsValue]) extends JsValue
