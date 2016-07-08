@@ -9,7 +9,7 @@ sealed trait JsValue {
     this match {
       case JsNull => "null"
       case JsString(value) => "\"" + value.replaceAll("\\|\"", "\\\\$1") + "\""
-      case JsBoolean(value) => "\"" + value + "\""
+      case JsBoolean(value) => value.toString
       case JsNumber(value) => value.toString
       case JsObject(values) => {
         values.map { case (name, value) =>
