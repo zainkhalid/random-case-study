@@ -21,6 +21,10 @@ object JsWriter {
     def write(value: Double): JsValue = JsNumber(value)
   }
 
+  implicit object LongJsWriter extends JsWriter[Long] {
+    def write(value: Long): JsValue = JsNumber(value)
+  }
+
   implicit def ListJsWriter[B: JsWriter]: JsWriter[List[B]] = {
     new JsWriter[List[B]] {
       def write(value: List[B]): JsValue = {
